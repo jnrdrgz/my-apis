@@ -27,6 +27,10 @@ def get_bondi_rec(bond_code):
 	points = {"puntos": [[x["latitud"], x["longitud"]] for x in r["nodos"]]}
 	return points
 
+def get_all_bondis_of_line_rec(nro):
+	recs = {NOMBRES[str(x)]: get_bondi_rec(x) for x in BONDIS[str(nro)]}
+	return recs
+
 def get_all_bondis_of_line_pos(nro):
 	pos = {NOMBRES[str(x)]: get_bondi_pos(x) for x in BONDIS[str(nro)]}
 	return pos

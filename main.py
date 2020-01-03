@@ -36,8 +36,7 @@ def read_item(lang: str, word: str):
 def get_b(t: str, nro: str):
 	jso = {"Error": "not type or line"}
 	if t == "r":
-		#get_bondi_rec(nro)
-		jso = {"Not Av": "Feature to be added"}
+		jso = get_all_bondis_of_line_rec(nro)
 	if t == "p":
 		jso = get_all_bondis_of_line_pos(nro)
 	
