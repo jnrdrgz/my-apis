@@ -5,7 +5,6 @@ from dictio.get_words import get_word_defs
 from bondis.get_data_bondis import *
 
 app = FastAPI()
-#uvicorn main:app --reload
 
 app.add_middleware(
     CORSMiddleware,
@@ -41,4 +40,8 @@ def get_b(t: str, nro: str):
 		jso = get_all_bondis_of_line_pos(nro)
 	
 	return jso
+
+@app.get("/bondis/lineas")
+def get_lineas():
+	return get_all_bondi_numbers()
 
