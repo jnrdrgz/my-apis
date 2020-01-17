@@ -31,6 +31,8 @@ NOMBRES = {
 
 }
 
+NOMBRES_INVERT = {v:k for k,v in NOMBRES.items()}
+
 def get_codes_all_lineas():
 	url = URL + "/rest/lineas/0"
 	r = requests.get(url).json()
@@ -43,6 +45,19 @@ def get_codes_all_lineas():
 		bondis[n].append(x["codLinea"])
 
 	return bondis
+
+## con estos dos metodos se pueden traer todos los nombres y codigos
+## sin embargo sigo usando los de arriba (BONDIS y NOMBRES)como test
+def get_all_names():
+	url = URL + "/rest/lineas/0"
+	r = requests.get(url).json()
+	nombres = {} 
+	for x in r["lineas"]:
+		if "-" in x["descripcion"]:
+			nombres[x["codLinea"]] = x["descripcion"].split("-")[1].strip()
+		else:
+			nombres[x["codLinea"]] = x["descripcion"].strip()
+	return nombres
 
 def get_bondi_pos(code):
 	r = requests.get(URL + "rest/posicionesBuses/" + str(code)).json()
@@ -73,9 +88,19 @@ def get_all_bondis_of_line_rec_from_mem(nro):
 	
 	return recs
 
+def get_rec_esp_from_mem(nro, ramal):
+	r = ""
+	with open('bondis/recorridos/{}/{}.json'.format(nro,ramal), 'r') as f:
+		r = json.load(f)
+	
+	return r
+
 def get_all_bondis_of_line_pos(nro):
 	pos = {NOMBRES[str(x)]: get_bondi_pos(x) for x in BONDIS[str(nro)]}
 	return pos
+
+def get_esp_bondi_pos(nro,ramal):
+	return get_bondi_pos(NOMBRES_INVERT[ramal])
 
 def get_all_bondi_numbers():
 	return {"numeros": list(BONDIS.keys())}
@@ -107,7 +132,11 @@ def what_bondi_me_tomo(partida, destino):
 			if(d_partida[1] <= 500 and d_destino[1] <= 500):
 				posibles.append([k,NOMBRES[c]])
 
-	return posibles
+	p = []
+	for x in posibles:
+		p.append({"nombres":"{}-{}".format(x[0], x[1]),"recorrido": get_rec_esp_from_mem(x[0], x[1]), "ubicaciones": get_esp_bondi_pos(x[0], x[1])})
+
+	return p
 
 def what_bondi_pasan_por_aca(punto):
 	posibles = []
@@ -118,4 +147,9 @@ def what_bondi_pasan_por_aca(punto):
 			if(d_partida[1] <= 500):
 				posibles.append([k,NOMBRES[c]])
 
-	return posibles
+
+	p = []
+	for x in posibles:
+		p = {"nombres":"{}-{}".format(x[0], x[1]),"recorrido": get_rec_esp_from_mem(x[0], x[1]), "ubicaciones": get_esp_bondi_pos(x[0], x[1])}
+
+	return p
