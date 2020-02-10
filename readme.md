@@ -6,4 +6,3 @@ Names and endpoints will be a mess between spanish and english until the API is 
 ## Projects
 - Dictio: API of [WordsWorthToRemember](https://github.com/jnrdrgz/WordsWorthToRemember)
 - Bondis: API of [bondistucuman-boost](https://github.com/jnrdrgz/bondistucuman-boost) (it's only a "forwarding" of the API of http://www.tucuman.miredbus.com.ar/)
-
